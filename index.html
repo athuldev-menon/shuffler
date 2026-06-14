@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dual Random Spinner - Straw Hat Edition</title>
+  <title>Challenge Card Spinner</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -11,240 +11,175 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rye&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: background 0.5s ease, color 0.5s ease;
     }
     
-    /* Pirate Wanted Font Style */
-    .pirate-font {
-      font-family: 'Rye', cursive;
+    /* Smooth custom scrollbars for content card */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.3);
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.5);
     }
 
-    /* Hide scrollbars for dynamic lists */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    /* Accent scale animations */
     @keyframes pulse-gentle {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
+      50% { transform: scale(1.02); }
     }
     .pulse-shuffle {
       animation: pulse-gentle 2s infinite ease-in-out;
     }
-
-    /* Weathered parchment backdrop for Wanted Theme */
-    .parchment-glow {
-      box-shadow: inset 0 0 40px rgba(139, 92, 26, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
   </style>
 </head>
-<body id="app-body" class="bg-gradient-to-br from-amber-950 via-stone-900 to-amber-950 min-h-screen text-stone-100 flex flex-col justify-between overflow-x-hidden">
+<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden">
 
   <!-- Main Container -->
   <main class="max-w-6xl w-full mx-auto p-4 md:p-6 lg:p-8 flex-grow flex flex-col justify-center items-center">
     
     <!-- App Header -->
-    <header class="w-full text-center mb-6">
-      <div class="inline-flex items-center gap-2 bg-amber-900/40 border border-amber-700/50 px-4 py-1.5 rounded-full text-amber-300 text-xs font-semibold tracking-wider uppercase mb-3">
-        <i class="fa-solid fa-skull-crossbones animate-bounce"></i> <span id="header-tag">Grand Line Destiny Selector</span>
+    <header class="w-full text-center mb-8">
+      <div class="inline-flex items-center gap-2 bg-indigo-950/80 border border-indigo-500/30 px-4 py-1.5 rounded-full text-indigo-300 text-xs font-semibold tracking-wider uppercase mb-3 shadow-lg">
+        <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> <span>Interactive Deck Selector</span>
       </div>
-      <h1 id="app-title" class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-400 pirate-font">
-        WANTED SPINNER
+      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-indigo-200 to-purple-400">
+        CHALLENGE CARD WHEEL
       </h1>
-      <p id="app-subtitle" class="text-stone-400 mt-2 text-sm md:text-base max-w-lg mx-auto">
-        Spin the Grand Line wheel to match your favorite Straw Hat Pirates with their high-risk pirate adventures!
+      <p class="text-slate-400 mt-2 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+        Spin the selector wheel to instantly extract, load, and study your next UX redesign challenge brief.
       </p>
     </header>
 
-    <!-- Preset & Theme Bar -->
-    <div class="w-full max-w-4xl mb-6 bg-stone-900/60 border border-amber-800/40 rounded-2xl p-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
-      
-      <!-- Quick Presets -->
-      <div class="flex flex-wrap gap-1.5 items-center justify-center">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-500/80 px-2"><i class="fa-solid fa-compass"></i> Log Pose Presets:</span>
-        <button onclick="loadPreset('onepiece')" class="preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-600/20 hover:bg-amber-600/40 border border-amber-500/40 hover:border-amber-500/80 transition-all text-amber-200">
-          🏴‍☠️ Straw Hats
-        </button>
-        <button onclick="loadPreset('truthOrDare')" class="preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-stone-800 hover:bg-stone-700 border border-stone-600 transition-all text-stone-300">
-          🔥 Truth / Dare
-        </button>
-        <button onclick="loadPreset('dinner')" class="preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-stone-800 hover:bg-stone-700 border border-stone-600 transition-all text-stone-300">
-          🍔 Food Match
-        </button>
-        <button onclick="loadPreset('workout')" class="preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-stone-800 hover:bg-stone-700 border border-stone-600 transition-all text-stone-300">
-          💪 Workout
-        </button>
-      </div>
-
-      <!-- Theme Switcher -->
-      <div class="flex items-center gap-2 border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-800 w-full sm:w-auto justify-center">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Theme:</span>
-        <div class="inline-flex p-1 bg-stone-950/80 rounded-xl border border-stone-800">
-          <button id="theme-btn-bounty" onclick="setAppTheme('bounty')" class="px-3 py-1 rounded-lg text-xs font-extrabold transition-all bg-amber-600 text-stone-950 shadow flex items-center gap-1">
-            <i class="fa-solid fa-scroll"></i> Wanted Poster
-          </button>
-          <button id="theme-btn-cosmic" onclick="setAppTheme('cosmic')" class="px-3 py-1 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-stone-200 flex items-center gap-1">
-            <i class="fa-solid fa-space-shuttle"></i> Cosmic Sky
-          </button>
-        </div>
-      </div>
-
-    </div>
-
     <!-- Playground Grid -->
-    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
       
-      <!-- Left Config Sidebar -->
-      <div class="lg:col-span-3 space-y-4">
-        <!-- Spinner 1 Control Panel -->
-        <div id="panel-spinner-1" class="bg-stone-900/90 border border-amber-900/60 rounded-2xl p-4 shadow-xl parchment-glow">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
-            <input id="spinner-title-1" type="text" value="Crew Member" class="bg-transparent border-b border-dashed border-stone-600 hover:border-stone-400 focus:border-amber-400 focus:outline-none font-bold text-stone-100 w-full text-sm">
-          </div>
-          <div class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar pr-1" id="list-spinner-1">
-            <!-- Dynamic Items -->
-          </div>
-          <div class="mt-3 flex gap-1">
-            <input id="new-item-1" type="text" placeholder="Add custom pirate..." class="flex-grow bg-stone-950 border border-stone-800 focus:border-amber-400 focus:outline-none rounded-lg px-2.5 py-1 text-xs text-stone-200">
-            <button onclick="addOption(1)" class="bg-amber-600 hover:bg-amber-500 text-stone-950 rounded-lg px-3 py-1 text-xs font-bold transition-all"><i class="fa-solid fa-plus"></i></button>
-          </div>
-        </div>
-
-        <!-- Audio & System Settings Box -->
-        <div id="panel-settings" class="bg-stone-900/90 border border-amber-900/40 rounded-2xl p-4 shadow-xl text-xs space-y-3">
-          <h3 class="font-bold uppercase tracking-wider text-amber-500 flex items-center justify-between">
-            <span>⚙️ Deck Controls</span>
+      <!-- Left Config Sidebar (Audio Control & Navigation Guides) -->
+      <div class="lg:col-span-3 flex flex-col gap-4">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex-grow flex flex-col justify-center gap-4">
+          <h3 class="font-bold uppercase tracking-widest text-indigo-400 text-xs flex items-center gap-2">
+            <i class="fa-solid fa-gears text-sm"></i> <span>Deck Settings</span>
           </h3>
+          
+          <div class="h-px bg-slate-800"></div>
+
           <div class="flex items-center justify-between">
-            <span class="text-stone-300">Sound FX Synthesis</span>
-            <button onclick="toggleSound()" id="sound-toggle" class="bg-amber-600 hover:bg-amber-500 text-stone-950 px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1">
+            <span class="text-xs text-slate-300">Sound FX synthesis</span>
+            <button onclick="toggleSound()" id="sound-toggle" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 shadow-md shadow-indigo-900/30">
               <i class="fa-solid fa-volume-high"></i> ON
             </button>
           </div>
-          <div class="flex items-center justify-between">
-            <span class="text-stone-300">Wheel Lock (Sync)</span>
-            <button onclick="toggleSync()" id="sync-toggle" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1">
-              <i class="fa-solid fa-lock"></i> Synchronized
-            </button>
-          </div>
+
+          <p class="text-[11px] text-slate-500 leading-relaxed mt-2 bg-slate-950/50 p-3 rounded-xl border border-slate-900">
+            Wheel deceleration is dynamically balanced with realistic physical friction calculations. Press <kbd class="px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded-md border border-slate-700 font-mono text-[9px]">SPACE</kbd> anywhere to Shuffle.
+          </p>
         </div>
       </div>
 
-      <!-- Center Interactive Wheels Display -->
-      <div class="lg:col-span-6 flex flex-col items-center justify-center space-y-6">
+      <!-- Center Interactive Wheel Display -->
+      <div class="lg:col-span-5 flex flex-col items-center justify-center gap-6">
         
-        <!-- Live Result Banner -->
-        <div id="result-banner" class="w-full text-center min-h-[90px] flex items-center justify-center px-4 py-4 bg-gradient-to-r from-stone-900 via-amber-950/40 to-stone-900 border border-amber-600/30 rounded-2xl relative overflow-hidden shadow-inner">
-          <div class="absolute inset-0 bg-amber-500/5 animate-pulse"></div>
-          <div class="relative z-10 flex flex-col justify-center items-center">
-            <p id="result-meta" class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-1">Spin to start bounty hunt</p>
-            <h2 id="result-text" class="text-xl md:text-2xl font-black text-white text-center flex items-center gap-2 justify-center flex-wrap pirate-font">
-              <span class="text-stone-500 text-lg">Click shuffle below!</span>
-            </h2>
-          </div>
-        </div>
-
         <!-- Spinners Container -->
-        <div id="wheels-frame" class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center py-5 bg-stone-900/80 border border-amber-800/40 rounded-3xl p-6 relative shadow-2xl parchment-glow">
+        <div class="w-full flex flex-col items-center justify-center py-8 bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 relative shadow-2xl backdrop-blur-sm">
           
-          <!-- Spinner 1 -->
+          <!-- Single Spinner -->
           <div class="flex flex-col items-center relative">
-            <div class="absolute -top-4 bg-gradient-to-r from-amber-600 to-yellow-500 text-stone-950 font-black px-4 py-1 rounded-full text-xs shadow-lg uppercase tracking-wider z-20 border border-amber-300/40 pirate-font" id="badge-title-1">
-              Crew Member
+            <div class="absolute -top-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-extrabold px-4 py-1.5 rounded-full text-xs shadow-lg uppercase tracking-wider z-20 border border-indigo-300/20">
+              UX Challenge Card
             </div>
             
             <!-- Wheel Outer Canvas Container -->
-            <div class="relative mt-2 p-1 bg-gradient-to-b from-amber-800 via-yellow-600 to-stone-900 rounded-full shadow-2xl border-4 border-amber-600/60">
+            <div class="relative mt-2 p-1 bg-gradient-to-b from-slate-800 via-indigo-950 to-slate-900 rounded-full shadow-2xl border border-slate-700/50">
               <!-- Wheel pointer -->
-              <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">
+              <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 z-30 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 22L3 6H21L12 22Z" fill="#d97706" stroke="#451a03" stroke-width="2.5" stroke-linejoin="round"/>
+                  <path d="M12 22L3 6H21L12 22Z" fill="#818cf8" stroke="#312e81" stroke-width="2.5" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <canvas id="canvas-spinner-1" width="220" height="220" class="rounded-full cursor-pointer transition-transform duration-75"></canvas>
-            </div>
-          </div>
-
-          <!-- Spinner 2 -->
-          <div class="flex flex-col items-center relative">
-            <div class="absolute -top-4 bg-gradient-to-r from-red-700 to-amber-600 text-stone-100 font-black px-4 py-1 rounded-full text-xs shadow-lg uppercase tracking-wider z-20 border border-red-500/40 pirate-font" id="badge-title-2">
-              Bounty Status
-            </div>
-            
-            <!-- Wheel Outer Canvas Container -->
-            <div class="relative mt-2 p-1 bg-gradient-to-b from-red-900 via-amber-700 to-stone-900 rounded-full shadow-2xl border-4 border-red-600/60">
-              <!-- Wheel pointer -->
-              <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 22L3 6H21L12 22Z" fill="#b91c1c" stroke="#450a0a" stroke-width="2.5" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <canvas id="canvas-spinner-2" width="220" height="220" class="rounded-full cursor-pointer transition-transform duration-75"></canvas>
+              <canvas id="canvas-spinner-1" width="260" height="260" class="rounded-full cursor-pointer transition-transform duration-75"></canvas>
             </div>
           </div>
         </div>
 
         <!-- Shuffle Button Controls -->
         <div class="w-full flex flex-col items-center gap-3">
-          <button onclick="spinBoth()" id="btn-shuffle" class="pulse-shuffle relative group w-full max-w-md bg-gradient-to-r from-amber-600 via-red-700 to-amber-700 hover:from-amber-500 hover:via-red-600 hover:to-amber-600 text-stone-100 font-extrabold text-2xl py-4 px-8 rounded-2xl shadow-[0_0_35px_rgba(217,119,6,0.35)] hover:shadow-[0_0_45px_rgba(217,119,6,0.55)] border-2 border-amber-400/30 transform hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 transition-all duration-200 pirate-font">
+          <button onclick="spin()" id="btn-shuffle" class="pulse-shuffle relative group w-full max-w-sm bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:via-indigo-500 hover:to-purple-500 text-white font-extrabold text-2xl py-4 px-8 rounded-2xl shadow-[0_0_35px_rgba(99,102,241,0.3)] hover:shadow-[0_0_45px_rgba(99,102,241,0.5)] border border-indigo-400/30 transform hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 transition-all duration-200">
             <span class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
             <span class="flex items-center justify-center gap-3 tracking-wider">
               <i class="fa-solid fa-arrows-spin animate-spin-slow"></i>
               SHUFFLE
-              <i class="fa-solid fa-skull"></i>
+              <i class="fa-solid fa-dice-five"></i>
             </span>
           </button>
-          <p id="tip-text" class="text-xs text-stone-500 flex items-center gap-1.5">
-            <i class="fa-solid fa-keyboard"></i> Press <kbd class="px-1.5 py-0.5 bg-stone-900 text-stone-400 rounded-md border border-stone-800 text-[10px]">SPACE</kbd> to shuffle crew & bounty!
+          <p id="tip-text" class="text-xs text-slate-500 flex items-center gap-1.5">
+            <i class="fa-solid fa-keyboard"></i> Press <kbd class="px-1.5 py-0.5 bg-slate-900 text-slate-400 rounded-md border border-slate-850 text-[10px]">SPACE</kbd> key to Shuffle!
           </p>
         </div>
 
       </div>
 
-      <!-- Right Config Sidebar & History -->
-      <div class="lg:col-span-3 space-y-4">
-        <!-- Spinner 2 Control Panel -->
-        <div id="panel-spinner-2" class="bg-stone-900/90 border border-amber-900/60 rounded-2xl p-4 shadow-xl parchment-glow">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
-            <input id="spinner-title-2" type="text" value="Bounty Status" class="bg-transparent border-b border-dashed border-stone-600 hover:border-stone-400 focus:border-red-400 focus:outline-none font-bold text-stone-100 w-full text-sm">
+      <!-- Right Active Briefing Sheet Panel -->
+      <div class="lg:col-span-4 flex flex-col items-stretch">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-2xl h-full flex flex-col justify-between relative overflow-hidden backdrop-blur-sm">
+          
+          <div class="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
+            <i class="fa-solid fa-file-invoice text-9xl text-white"></i>
           </div>
-          <div class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar pr-1" id="list-spinner-2">
-            <!-- Dynamic Items -->
-          </div>
-          <div class="mt-3 flex gap-1">
-            <input id="new-item-2" type="text" placeholder="Add custom action..." class="flex-grow bg-stone-950 border border-stone-800 focus:border-red-400 focus:outline-none rounded-lg px-2.5 py-1 text-xs text-stone-200">
-            <button onclick="addOption(2)" class="bg-red-600 hover:bg-red-500 text-white rounded-lg px-3 py-1 text-xs font-bold transition-all"><i class="fa-solid fa-plus"></i></button>
-          </div>
-        </div>
 
-        <!-- History Log Box -->
-        <div id="panel-history" class="bg-stone-900/90 border border-amber-900/40 rounded-2xl p-4 shadow-xl flex flex-col parchment-glow">
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="font-bold uppercase tracking-wider text-amber-500 text-xs flex items-center gap-1.5 pirate-font">
-              <i class="fa-solid fa-anchor"></i> Log Pose
-            </h3>
-            <button onclick="clearHistory()" class="text-stone-500 hover:text-red-400 text-[10px] uppercase font-bold transition-all">
-              Clear Log
-            </button>
-          </div>
-          <div class="space-y-2 max-h-[160px] overflow-y-auto no-scrollbar" id="history-container">
-            <!-- History Items -->
-            <div class="text-stone-500 text-center text-xs py-4 italic" id="empty-history">
-              No bounty matches made yet.
+          <!-- Dynamic Active Card State View -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span id="brief-badge" class="px-2 py-0.5 bg-indigo-950/80 border border-indigo-500/30 text-indigo-300 rounded text-[9px] uppercase tracking-wider font-extrabold">Active Brief</span>
+                <h3 id="brief-title" class="text-lg font-bold text-slate-100 tracking-tight mt-1">No Selection</h3>
+              </div>
+              <div class="text-right">
+                <span class="text-[9px] text-slate-500 uppercase block tracking-wider font-semibold">Platform</span>
+                <span id="brief-platform" class="text-xs font-bold text-slate-300">-</span>
+              </div>
+            </div>
+
+            <!-- Scrollable Information Container -->
+            <div class="space-y-4 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+              <div>
+                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-users"></i> Target User</span>
+                <p id="brief-target" class="text-xs text-slate-300 font-semibold mt-0.5">-</p>
+              </div>
+
+              <div>
+                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation"></i> Scenario Context</span>
+                <p id="brief-scenario" class="text-xs text-slate-300 leading-relaxed italic bg-slate-950/60 p-3 rounded-xl border border-slate-850 mt-1.5">-</p>
+              </div>
+
+              <div>
+                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-list-check"></i> Points to Consider</span>
+                <ul id="brief-considerations" class="space-y-1 text-xs text-slate-300 mt-1.5 pl-4 list-disc marker:text-indigo-400">
+                  <li class="italic text-slate-500 list-none -ml-4">Spin the wheel to load details.</li>
+                </ul>
+              </div>
+
+              <div>
+                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap"></i> Deliverables</span>
+                <p id="brief-deliverables" class="text-xs text-slate-300 leading-relaxed mt-0.5">-</p>
+              </div>
             </div>
           </div>
+
+          <div class="border-t border-slate-800 pt-3 mt-4 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+            <span>Deck Status: Active Route</span>
+            <span id="brief-time" class="font-bold text-indigo-400">-</span>
+          </div>
+
         </div>
       </div>
 
@@ -256,112 +191,187 @@
   </main>
 
   <!-- Premium Footer -->
-  <footer class="border-t border-amber-900/30 bg-stone-950/80 py-4 px-6 text-center text-xs text-stone-500">
+  <footer class="border-t border-slate-900 bg-slate-950/80 py-4 px-6 text-center text-xs text-slate-500">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-      <p>&copy; 2026 Grand Line Dual Spinner. Authenticated Pirate Randomness Engine.</p>
+      <p>&copy; 2026 Challenge Card Wheel. Single-Wheel Challenge Redesign.</p>
       <div class="flex gap-4">
-        <span class="hover:text-stone-300 transition-colors"><i class="fa-solid fa-skull-crossbones"></i> Wanted Crew Edition</span>
-        <span class="hover:text-stone-300 transition-colors"><i class="fa-solid fa-coins"></i> Beli Synthesis Ready</span>
+        <span class="hover:text-slate-300 transition-colors"><i class="fa-solid fa-circle-notch"></i> Wanted Cards CC01 - CC10</span>
+        <span class="hover:text-slate-300 transition-colors"><i class="fa-solid fa-bolt"></i> Realtime Deceleration</span>
       </div>
     </div>
   </footer>
 
   <!-- Sound / Synthesis Logic, Canvas Engine, App Core -->
   <script>
-    // System Config & Global States
     let audioCtx = null;
     let soundEnabled = true;
-    let syncWheels = true;
-    let appTheme = 'bounty'; // Default theme set to 'bounty'
-    const history = [];
 
-    // Theme Color Palettes
-    // Theme 1: Bounty (Straw Hat Wanted sepia/gold/crimson feel)
-    const bountyColors1 = [
-      '#78350f', '#9a3412', '#b45309', '#d97706', 
-      '#854d0e', '#a16207', '#ca8a04', '#7c2d12'
-    ];
-    const bountyColors2 = [
-      '#7f1d1d', '#991b1b', '#b91c1c', '#dc2626',
-      '#450a0a', '#9a3412', '#b45309', '#881337'
-    ];
-
-    // Theme 2: Cosmic (Original Neon space/indigo look)
-    const cosmicColors1 = [
-      '#10b981', '#06b6d4', '#3b82f6', '#4f46e5', 
-      '#22c55e', '#0284c7', '#6366f1', '#0d9488'
-    ];
-    const cosmicColors2 = [
-      '#ec4899', '#f43f5e', '#d946ef', '#a855f7',
-      '#e11d48', '#be185d', '#8b5cf6', '#db2777'
-    ];
-
-    // Presets definition
-    const presets = {
-      onepiece: {
-        title1: "Pirate Crew",
-        title2: "Wanted Reward / Action",
-        options1: [
-          "🍖 Luffy", 
-          "⚔️ Zoro", 
-          "🍊 Nami", 
-          "🎯 Usopp", 
-          "🚬 Sanji", 
-          "🌸 Chopper", 
-          "📖 Robin", 
-          "🤖 Franky", 
-          "🎻 Brook", 
-          "🥋 Jinbe"
+    // 10 Official UX Challenge Cards Data Registry
+    const challengeCards = [
+      {
+        id: "CC01",
+        platform: "Netflix",
+        target: "Students",
+        scenario: "Students often spend excessive time browsing for content and struggle to balance entertainment with academics.",
+        challenge: "Redesign Netflix to create a more student-friendly experience.",
+        considerations: [
+          "Time management features",
+          "Personalized recommendations",
+          "Study-break suggestions",
+          "Data-saving options",
+          "Productivity-focused viewing"
         ],
-        options2: [
-          "Wanted: 3,000,000,000 ฿", 
-          "Wanted: 1,111,000,000 ฿", 
-          "Gets completely lost immediately", 
-          "Wanted: 366,000,000 ฿", 
-          "Cooks a Legendary Feast", 
-          "Wanted: 1,000 ฿ (Pet Bounty)", 
-          "Deciphers the Poneglyph", 
-          "Yells: SUPERRRRR!", 
-          "Sings Binks' Sake", 
-          "Steals all the Beli"
-        ]
+        deliverables: "Show how your redesign improves the student experience while maintaining Netflix's core functionality."
       },
-      truthOrDare: {
-        title1: "Players",
-        title2: "Action",
-        options1: ["Alex", "Jessica", "Liam", "Sophia", "Marcus", "Emily"],
-        options2: [
-          "Truth: Secret crush?", 
-          "Dare: Do 10 pushups", 
-          "Truth: Worst habit?", 
-          "Dare: Text your ex", 
-          "Truth: Biggest fear?", 
-          "Dare: Sing a song loudly"
-        ]
+      {
+        id: "CC02",
+        platform: "Instagram",
+        target: "Senior Citizens",
+        scenario: "Many senior citizens find Instagram difficult to navigate due to complex features, small icons, and rapidly changing content.",
+        challenge: "Redesign Instagram to make it more accessible and comfortable for elderly users.",
+        considerations: [
+          "Larger interface elements",
+          "Simplified navigation",
+          "Improved readability",
+          "Safety and privacy controls",
+          "Family-focused interactions"
+        ],
+        deliverables: "Demonstrate how your redesign makes Instagram easier and safer for seniors."
       },
-      dinner: {
-        title1: "Main Dish",
-        title2: "Perfect Beverage",
-        options1: ["🍕 Cheese Pizza", "🍔 Double Burger", "🍣 Sushi Combo", "🍝 Creamy Pasta", "🌮 Spicy Tacos", "🥗 Caesar Salad"],
-        options2: ["🥤 Craft Cola", "🥤 Iced Green Tea", "🍋 Lemonade", "🍺 Smooth Ale", "🍇 Fruit Punch", "🥛 Sparkling Water"]
+      {
+        id: "CC03",
+        platform: "YouTube",
+        target: "School Students",
+        scenario: "Students frequently get distracted by entertainment content while using YouTube for educational purposes.",
+        challenge: "Redesign YouTube to support focused learning.",
+        considerations: [
+          "Learning mode",
+          "Educational recommendations",
+          "Progress tracking",
+          "Reduced distractions",
+          "Study playlists"
+        ],
+        deliverables: "Create a learning-focused YouTube experience."
       },
-      workout: {
-        title1: "Body Focus",
-        title2: "Exercise Style",
-        options1: ["💪 Strong Arms", "🦵 Leg Burner", "🏋️ Core Crusher", "🫁 Heavy Cardio", "🧘 Active Stretch"],
-        options2: ["⏱️ 1 Minute AMRAP", "🔥 3 Sets of 12 reps", "⏳ Max Effort Hold", "💫 Slow & Controlled", "⚡ Speed burst!"]
+      {
+        id: "CC04",
+        platform: "WhatsApp",
+        target: "Teachers",
+        scenario: "Teachers often manage multiple student groups, assignments, and announcements through WhatsApp.",
+        challenge: "Redesign WhatsApp to better support educational communication.",
+        considerations: [
+          "Assignment management",
+          "File organization",
+          "Class announcements",
+          "Student engagement",
+          "Communication efficiency"
+        ],
+        deliverables: "Present a teacher-friendly WhatsApp experience."
+      },
+      {
+        id: "CC05",
+        platform: "BookMyShow",
+        target: "Families",
+        scenario: "Families often face challenges while booking tickets for multiple members with different preferences.",
+        challenge: "Redesign BookMyShow for family outings and group bookings.",
+        considerations: [
+          "Family profiles",
+          "Child-friendly content filters",
+          "Group seat selection",
+          "Family recommendations",
+          "Easy booking process"
+        ],
+        deliverables: "Design a smoother booking experience for families."
+      },
+      {
+        id: "CC06",
+        platform: "Swiggy",
+        target: "Senior Citizens",
+        scenario: "Many elderly users find food delivery apps difficult to use because of small text, multiple steps, and overwhelming choices.",
+        challenge: "Redesign Swiggy to improve accessibility and usability.",
+        considerations: [
+          "Larger text and buttons",
+          "Simplified ordering",
+          "Voice-assisted interactions",
+          "Favorite meals",
+          "Emergency assistance options"
+        ],
+        deliverables: "Show how ordering food becomes easier for senior citizens."
+      },
+      {
+        id: "CC07",
+        platform: "Discord",
+        target: "College Clubs & Communities",
+        scenario: "Student clubs often struggle to organize discussions, events, announcements, and member participation.",
+        challenge: "Redesign Discord to better support college clubs and student communities.",
+        considerations: [
+          "Event management",
+          "Task assignment",
+          "Member onboarding",
+          "Club announcements",
+          "Activity tracking"
+        ],
+        deliverables: "Create a community-focused Discord experience."
+      },
+      {
+        id: "CC08",
+        platform: "LinkedIn",
+        target: "Fresh Graduates",
+        scenario: "Fresh graduates often find it difficult to build professional networks and discover relevant career opportunities.",
+        challenge: "Redesign LinkedIn for users entering the workforce.",
+        considerations: [
+          "Career guidance",
+          "Skill development",
+          "Portfolio showcase",
+          "Job recommendations",
+          "Networking opportunities"
+        ],
+        deliverables: "Demonstrate how your redesign supports career growth."
+      },
+      {
+        id: "CC09",
+        platform: "Uber",
+        target: "Women Traveling Alone",
+        scenario: "Safety and trust are major concerns for women using ride-hailing services.",
+        challenge: "Redesign Uber to improve safety and confidence during travel.",
+        considerations: [
+          "Emergency assistance",
+          "Live safety monitoring",
+          "Ride verification",
+          "Trusted contacts",
+          "Safety-focused interface design"
+        ],
+        deliverables: "Present a safer and more reassuring ride-booking experience."
+      },
+      {
+        id: "CC10",
+        platform: "Spotify",
+        target: "Visually Impaired Users",
+        scenario: "Music applications can be challenging for visually impaired users when navigation relies heavily on visual elements.",
+        challenge: "Redesign Spotify to improve accessibility and ease of use.",
+        considerations: [
+          "Voice navigation",
+          "Audio feedback",
+          "Accessibility shortcuts",
+          "Simplified controls",
+          "Personalized accessibility settings"
+        ],
+        deliverables: "Show how your redesign enables a more inclusive listening experience."
       }
-    };
+    ];
 
-    // Spinner Wheel State representation
+    // Cosmic Theme Segments Color Palette
+    const cosmicColors = [
+      '#0ea5e9', '#0284c7', '#2563eb', '#1d4ed8',
+      '#4338ca', '#3730a3', '#5b21b6', '#6d28d9',
+      '#7c3aed', '#4f46e5'
+    ];
+
     class SpinnerWheel {
-      constructor(canvasId, inputId, badgeId, listId, options) {
+      constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
-        this.inputId = inputId;
-        this.badgeId = badgeId;
-        this.listId = listId;
-        this.options = [...options];
+        this.options = challengeCards.map(c => c.id);
         this.rotation = 0; // Current physical angle
         this.velocity = 0; // Rotational velocity (rad/s)
         this.isSpinning = false;
@@ -369,58 +379,7 @@
       }
 
       getColors() {
-        if (appTheme === 'bounty') {
-          return this.canvas.id === 'canvas-spinner-1' ? bountyColors1 : bountyColors2;
-        } else {
-          return this.canvas.id === 'canvas-spinner-1' ? cosmicColors1 : cosmicColors2;
-        }
-      }
-
-      getTitle() {
-        return document.getElementById(this.inputId).value || "Spinner";
-      }
-
-      setTitle(val) {
-        document.getElementById(this.inputId).value = val;
-        document.getElementById(this.badgeId).innerText = val;
-      }
-
-      addOption(val) {
-        if (!val || val.trim() === '') return;
-        this.options.push(val.trim());
-        this.renderList();
-        this.draw();
-      }
-
-      removeOption(index) {
-        if (this.options.length <= 2) {
-          showBannerAlert("Each wheel needs at least 2 options!", "rose");
-          return;
-        }
-        this.options.splice(index, 1);
-        this.renderList();
-        this.draw();
-      }
-
-      renderList() {
-        const container = document.getElementById(this.listId);
-        container.innerHTML = '';
-        this.options.forEach((opt, idx) => {
-          const div = document.createElement('div');
-          
-          // Theme dependent class selection
-          const borderStyle = appTheme === 'bounty' ? 'border-amber-900/40 bg-stone-950/70' : 'border-slate-700/50 bg-slate-900/60';
-          const textStyle = appTheme === 'bounty' ? 'text-amber-100' : 'text-slate-200';
-
-          div.className = `flex items-center justify-between gap-2 p-2 rounded-xl border ${borderStyle} hover:border-amber-600 transition-all text-[11px] group`;
-          div.innerHTML = `
-            <span class="truncate font-semibold ${textStyle}">${opt}</span>
-            <button onclick="deleteOption('${this.inputId}', ${idx})" class="text-stone-500 hover:text-red-500 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity p-0.5">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          `;
-          container.appendChild(div);
-        });
+        return cosmicColors;
       }
 
       draw() {
@@ -428,7 +387,7 @@
         const w = this.canvas.width;
         const h = this.canvas.height;
         const cx = w / 2;
-        const cy = h / 2;
+        const cy = w / 2;
         const r = Math.min(cx, cy) - 10;
 
         ctx.clearRect(0, 0, w, h);
@@ -455,8 +414,8 @@
           ctx.fill();
 
           // Stroke slice separator
-          ctx.strokeStyle = appTheme === 'bounty' ? 'rgba(45, 15, 5, 0.6)' : 'rgba(15, 23, 42, 0.45)';
-          ctx.lineWidth = appTheme === 'bounty' ? 2 : 1.5;
+          ctx.strokeStyle = 'rgba(15, 23, 42, 0.45)';
+          ctx.lineWidth = 1.5;
           ctx.stroke();
 
           // Draw Text Labels
@@ -465,41 +424,27 @@
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
           
-          // Theme dependent font properties
           ctx.fillStyle = '#ffffff';
-          if (appTheme === 'bounty') {
-            ctx.font = 'bold 11px "Rye", cursive';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-            ctx.shadowBlur = 4;
-          } else {
-            ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
-            ctx.shadowColor = 'rgba(0,0,0,0.4)';
-            ctx.shadowBlur = 4;
-          }
+          ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+          ctx.shadowColor = 'rgba(0,0,0,0.5)';
+          ctx.shadowBlur = 4;
 
           const text = segments[i];
-          const truncated = text.length > 12 ? text.substring(0, 10) + '...' : text;
-          ctx.fillText(truncated, r - 15, 0);
+          ctx.fillText(text, r - 20, 0);
           ctx.restore();
         }
 
-        // Draw inner absolute metallic/antique cap
+        // Draw center spindle cap
         ctx.beginPath();
-        ctx.arc(0, 0, r * 0.2, 0, 2 * Math.PI);
-        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.2);
-        if (appTheme === 'bounty') {
-          grad.addColorStop(0, '#fef08a'); // Gold yellow
-          grad.addColorStop(0.5, '#ca8a04'); // Dark Gold
-          grad.addColorStop(1, '#451a03'); // Wooden brown
-        } else {
-          grad.addColorStop(0, '#f8fafc');
-          grad.addColorStop(0.5, '#cbd5e1');
-          grad.addColorStop(1, '#64748b');
-        }
+        ctx.arc(0, 0, r * 0.22, 0, 2 * Math.PI);
+        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.22);
+        grad.addColorStop(0, '#f8fafc');
+        grad.addColorStop(0.5, '#cbd5e1');
+        grad.addColorStop(1, '#475569');
         ctx.fillStyle = grad;
         ctx.fill();
-        ctx.strokeStyle = appTheme === 'bounty' ? '#78350f' : '#334155';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2.5;
         ctx.stroke();
 
         ctx.restore();
@@ -526,13 +471,13 @@
           this.lastTickedIndex = currentWinnerIdx;
         }
 
-        // Complete/Stop condition
+        // Stop condition
         if (this.velocity < 0.001) {
           this.velocity = 0;
           this.isSpinning = false;
-          return true; // Just stopped spinning
+          return true; // Finished
         }
-        return false; // Still going
+        return false;
       }
 
       getWinningIndex() {
@@ -552,185 +497,32 @@
       }
     }
 
-    // Initialize both wheels with distinct palettes
-    const wheel1 = new SpinnerWheel(
-      'canvas-spinner-1', 'spinner-title-1', 'badge-title-1', 'list-spinner-1',
-      presets.onepiece.options1
-    );
-
-    const wheel2 = new SpinnerWheel(
-      'canvas-spinner-2', 'spinner-title-2', 'badge-title-2', 'list-spinner-2',
-      presets.onepiece.options2
-    );
-
-    // Dynamic Theme Switching Action
-    function setAppTheme(theme) {
-      appTheme = theme;
-      const body = document.getElementById('app-body');
-      const appTitle = document.getElementById('app-title');
-      const appSubtitle = document.getElementById('app-subtitle');
-      const headerTag = document.getElementById('header-tag');
-      const resultBanner = document.getElementById('result-banner');
-      const wheelsFrame = document.getElementById('wheels-frame');
-      const btnShuffle = document.getElementById('btn-shuffle');
-      
-      const themeBounty = document.getElementById('theme-btn-bounty');
-      const themeCosmic = document.getElementById('theme-btn-cosmic');
-
-      if (theme === 'bounty') {
-        // Wanted Sepia Theme
-        body.className = "bg-gradient-to-br from-amber-950 via-stone-900 to-amber-950 min-h-screen text-stone-100 flex flex-col justify-between overflow-x-hidden";
-        appTitle.className = "text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-400 pirate-font";
-        appTitle.innerText = "WANTED SPINNER";
-        appSubtitle.innerText = "Spin the Grand Line wheel to match your favorite Straw Hat Pirates with their high-risk pirate adventures!";
-        headerTag.innerText = "Grand Line Destiny Selector";
-        
-        resultBanner.className = "w-full text-center min-h-[90px] flex items-center justify-center px-4 py-4 bg-gradient-to-r from-stone-900 via-amber-950/40 to-stone-900 border border-amber-600/30 rounded-2xl relative overflow-hidden shadow-inner";
-        wheelsFrame.className = "w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center py-5 bg-stone-900/80 border border-amber-800/40 rounded-3xl p-6 relative shadow-2xl parchment-glow";
-        btnShuffle.className = "pulse-shuffle relative group w-full max-w-md bg-gradient-to-r from-amber-600 via-red-700 to-amber-700 hover:from-amber-500 hover:via-red-600 hover:to-amber-600 text-stone-100 font-extrabold text-2xl py-4 px-8 rounded-2xl shadow-[0_0_35px_rgba(217,119,6,0.35)] hover:shadow-[0_0_45px_rgba(217,119,6,0.55)] border-2 border-amber-400/30 transform hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 transition-all duration-200 pirate-font";
-        
-        // Active states for buttons
-        themeBounty.className = "px-3 py-1 rounded-lg text-xs font-extrabold transition-all bg-amber-600 text-stone-950 shadow flex items-center gap-1";
-        themeCosmic.className = "px-3 py-1 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-stone-200 flex items-center gap-1";
-
-        // Dynamic element panels
-        document.getElementById('panel-spinner-1').className = "bg-stone-900/90 border border-amber-900/60 rounded-2xl p-4 shadow-xl parchment-glow";
-        document.getElementById('panel-spinner-2').className = "bg-stone-900/90 border border-amber-900/60 rounded-2xl p-4 shadow-xl parchment-glow";
-        document.getElementById('panel-settings').className = "bg-stone-900/90 border border-amber-900/40 rounded-2xl p-4 shadow-xl text-xs space-y-3";
-        document.getElementById('panel-history').className = "bg-stone-900/90 border border-amber-900/40 rounded-2xl p-4 shadow-xl flex flex-col parchment-glow";
-
-      } else {
-        // Cosmic Indigo Space Theme
-        body.className = "bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden";
-        appTitle.className = "text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-purple-300";
-        appTitle.innerText = "Double Destiny Wheel";
-        appSubtitle.innerText = "Customize two wheels, hit Shuffle, and see what perfect (or chaotic) combination destiny chooses for you!";
-        headerTag.innerText = "Dual Random Selector";
-
-        resultBanner.className = "w-full text-center min-h-[90px] flex items-center justify-center px-4 py-4 bg-gradient-to-r from-slate-800/40 via-indigo-900/30 to-slate-800/40 border border-indigo-500/20 rounded-2xl relative overflow-hidden";
-        wheelsFrame.className = "w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center py-5 bg-slate-800/20 border border-slate-700/30 rounded-3xl p-6 relative";
-        btnShuffle.className = "pulse-shuffle relative group w-full max-w-md bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:via-indigo-500 hover:to-purple-500 text-white font-extrabold text-xl py-4 px-8 rounded-2xl shadow-[0_0_30px_rgba(99,102,241,0.4)] hover:shadow-[0_0_40px_rgba(99,102,241,0.6)] transform hover:-translate-y-0.5 active:translate-y-0.5 active:scale-95 transition-all duration-200";
-        
-        // Active states for buttons
-        themeBounty.className = "px-3 py-1 rounded-lg text-xs font-bold transition-all text-stone-400 hover:text-stone-200 flex items-center gap-1";
-        themeCosmic.className = "px-3 py-1 rounded-lg text-xs font-extrabold transition-all bg-indigo-600 text-white shadow flex items-center gap-1";
-
-        // Dynamic element panels
-        document.getElementById('panel-spinner-1').className = "bg-slate-800/80 border border-slate-700 rounded-2xl p-4 shadow-xl";
-        document.getElementById('panel-spinner-2').className = "bg-slate-800/80 border border-slate-700 rounded-2xl p-4 shadow-xl";
-        document.getElementById('panel-settings').className = "bg-slate-800/80 border border-slate-700 rounded-2xl p-4 shadow-xl text-xs space-y-3";
-        document.getElementById('panel-history').className = "bg-slate-800/80 border border-slate-700 rounded-2xl p-4 shadow-xl flex flex-col";
-      }
-
-      // Re-render and draw everything under the new aesthetic
-      wheel1.renderList();
-      wheel2.renderList();
-      wheel1.draw();
-      wheel2.draw();
-    }
+    // Initialize Wheel
+    const wheel = new SpinnerWheel('canvas-spinner-1');
 
     // Initial setup hook
     window.addEventListener('DOMContentLoaded', () => {
-      // Initialize with One Piece preset
-      loadPreset('onepiece');
-
-      // Set default theme styling
-      setAppTheme('bounty');
-
-      // Setup Inputs/Titles reactive events
-      document.getElementById('spinner-title-1').addEventListener('input', (e) => {
-        document.getElementById('badge-title-1').innerText = e.target.value || "Spinner 1";
-      });
-      document.getElementById('spinner-title-2').addEventListener('input', (e) => {
-        document.getElementById('badge-title-2').innerText = e.target.value || "Spinner 2";
-      });
+      wheel.draw();
 
       // Spacebar globally triggers Shuffle
       window.addEventListener('keydown', (e) => {
         if (e.code === 'Space') {
-          // Block spacebar scrolling
           const target = e.target.tagName.toLowerCase();
           if (target !== 'input' && target !== 'textarea' && target !== 'button') {
             e.preventDefault();
-            spinBoth();
+            spin();
           }
         }
       });
 
       // Handle custom window resize dynamics
       window.addEventListener('resize', () => {
-        wheel1.draw();
-        wheel2.draw();
+        wheel.draw();
       });
 
       // Animation GameLoop
       requestAnimationFrame(animationLoop);
     });
-
-    // Option Addition handlers
-    function addOption(spinnerNum) {
-      const input = document.getElementById(`new-item-${spinnerNum}`);
-      const val = input.value;
-      if (spinnerNum === 1) {
-        wheel1.addOption(val);
-      } else {
-        wheel2.addOption(val);
-      }
-      input.value = '';
-    }
-
-    // Bind Enter key inside add-option boxes
-    document.getElementById('new-item-1').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') addOption(1);
-    });
-    document.getElementById('new-item-2').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') addOption(2);
-    });
-
-    // Global option remover
-    function deleteOption(inputId, index) {
-      if (inputId === 'spinner-title-1') {
-        wheel1.removeOption(index);
-      } else {
-        wheel2.removeOption(index);
-      }
-    }
-
-    // Load custom presets
-    function loadPreset(presetKey) {
-      const data = presets[presetKey];
-      if (!data) return;
-
-      // Reset Wheel options
-      wheel1.options = [...data.options1];
-      wheel2.options = [...data.options2];
-
-      // Update inputs & badges
-      wheel1.setTitle(data.title1);
-      wheel2.setTitle(data.title2);
-
-      // Render and draw
-      wheel1.renderList();
-      wheel2.renderList();
-      wheel1.draw();
-      wheel2.draw();
-
-      if (presetKey === 'onepiece') {
-        showBannerAlert("Straw Hat Pirates Wanted Poster Loaded!", "amber");
-      } else {
-        showBannerAlert(`Preset "${presetKey.toUpperCase()}" loaded!`, "indigo");
-      }
-    }
-
-    // Custom non-blocking banners inside the results area
-    function showBannerAlert(msg, colorClass) {
-      const banner = document.getElementById('result-banner');
-      const meta = document.getElementById('result-meta');
-      const text = document.getElementById('result-text');
-
-      meta.innerText = "System Alert";
-      text.innerHTML = `<span class="text-${colorClass}-400 text-base md:text-lg font-bold">${msg}</span>`;
-    }
 
     // Audio Synthesis engine
     function getAudioContext() {
@@ -757,20 +549,20 @@
 
         // Quick retro click synth parameter
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(450, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.05);
+        osc.frequency.setValueAtTime(500, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.04);
 
         gain.gain.setValueAtTime(0.08, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+        gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.03);
 
         osc.start();
-        osc.stop(ctx.currentTime + 0.05);
+        osc.stop(ctx.currentTime + 0.04);
       } catch (err) {
         console.warn('Synthesizer audio blocked or not supported on this browser.');
       }
     }
 
-    // Synthesis generator: high bounty-hunter win chime
+    // Synthesis generator: high win chime
     function playLandChime() {
       if (!soundEnabled) return;
       try {
@@ -792,18 +584,9 @@
           osc.stop(now + delay + dur);
         };
 
-        if (appTheme === 'bounty') {
-          // Energetic trumpet/adventure fanfare
-          playNote(392.00, 0, 0.15);   // G4
-          playNote(523.25, 0.1, 0.15); // C5
-          playNote(659.25, 0.2, 0.15); // E5
-          playNote(783.99, 0.3, 0.4);  // G5
-        } else {
-          // Cosmic arpeggio of victory
-          playNote(523.25, 0, 0.2); // C5
-          playNote(659.25, 0.1, 0.2); // E5
-          playNote(783.99, 0.2, 0.35); // G5
-        }
+        playNote(523.25, 0, 0.2); // C5
+        playNote(659.25, 0.1, 0.2); // E5
+        playNote(783.99, 0.2, 0.35); // G5
       } catch (err) {}
     }
 
@@ -812,128 +595,85 @@
       soundEnabled = !soundEnabled;
       const btn = document.getElementById('sound-toggle');
       if (soundEnabled) {
-        btn.className = appTheme === 'bounty' ? "bg-amber-600 hover:bg-amber-500 text-stone-950 px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1" : "bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1";
+        btn.className = "bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 shadow-md shadow-indigo-900/30";
         btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> ON`;
       } else {
-        btn.className = "bg-stone-700 hover:bg-stone-600 text-stone-400 px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1";
+        btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-400 text-xs px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5";
         btn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i> OFF`;
-      }
-    }
-
-    // Velocity Sync controller
-    function toggleSync() {
-      syncWheels = !syncWheels;
-      const btn = document.getElementById('sync-toggle');
-      if (syncWheels) {
-        btn.className = "bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1";
-        btn.innerHTML = `<i class="fa-solid fa-lock"></i> Synchronized`;
-      } else {
-        btn.className = "bg-amber-600 hover:bg-amber-500 text-stone-950 px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1";
-        btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> Independent`;
       }
     }
 
     // Main animation runner
     const friction = 0.985;
-    let isCurrentlyAnimating = false;
 
     function animationLoop() {
-      let isStillSpinning1 = false;
-      let isStillSpinning2 = false;
+      let isStillSpinning = false;
 
-      if (wheel1.isSpinning) {
-        isStillSpinning1 = wheel1.update(friction);
-        wheel1.draw();
-      }
-      if (wheel2.isSpinning) {
-        isStillSpinning2 = wheel2.update(friction);
-        wheel2.draw();
+      if (wheel.isSpinning) {
+        isStillSpinning = wheel.update(friction);
+        wheel.draw();
       }
 
-      // Check landing events
-      if (isStillSpinning1 || isStillSpinning2) {
-        // Evaluate if BOTH are finished
-        if (!wheel1.isSpinning && !wheel2.isSpinning) {
-          onSpinnersStopped();
+      if (isStillSpinning) {
+        if (!wheel.isSpinning) {
+          onWheelStopped();
         }
       }
 
-      // Update confetti overlay if active
       updateConfetti();
-
       requestAnimationFrame(animationLoop);
     }
 
-    // Trigger dual spin sequences
-    function spinBoth() {
-      if (wheel1.isSpinning || wheel2.isSpinning) return; // Prevent double spin spamming
+    // Trigger spin
+    function spin() {
+      if (wheel.isSpinning) return; 
 
-      // Initialize Synthesizer context
       getAudioContext();
 
-      // Reset results display temporarily
-      const meta = document.getElementById('result-meta');
-      const text = document.getElementById('result-text');
-      const btn = document.getElementById('btn-shuffle');
+      // Reset Briefing State visually during spin
+      document.getElementById('brief-title').innerText = "Selecting Card...";
+      document.getElementById('brief-platform').innerText = "Analyzing...";
+      document.getElementById('brief-target').innerText = "Calibrating Segment...";
+      document.getElementById('brief-scenario').innerText = "Formulating design challenge parameters...";
+      document.getElementById('brief-deliverables').innerText = "Assembling objectives...";
+      document.getElementById('brief-considerations').innerHTML = `<li class="italic text-slate-500 animate-pulse list-none -ml-4">Navigating the deck...</li>`;
 
-      meta.innerText = appTheme === 'bounty' ? "Plotting navigation route..." : "Selecting combination...";
-      text.innerHTML = `
-        <span class="${appTheme === 'bounty' ? 'text-amber-400' : 'text-slate-400'} animate-pulse text-lg flex items-center gap-2">
-          <i class="fa-solid fa-arrows-spin animate-spin"></i> Spinning wheels...
-        </span>
-      `;
+      const btn = document.getElementById('btn-shuffle');
       btn.disabled = true;
       btn.classList.add('opacity-75', 'cursor-not-allowed');
 
-      // Random high velocities
-      const baseVelocity = 0.45 + Math.random() * 0.2;
-      
-      if (syncWheels) {
-        wheel1.spin(baseVelocity);
-        wheel2.spin(baseVelocity);
-      } else {
-        // Distinct randomized velocities for varying dynamic offsets
-        wheel1.spin(0.4 + Math.random() * 0.25);
-        wheel2.spin(0.4 + Math.random() * 0.25);
-      }
+      // Random high velocity
+      const targetVel = 0.45 + Math.random() * 0.3;
+      wheel.spin(targetVel);
     }
 
-    // Action executed when both wheels successfully stop spinning
-    function onSpinnersStopped() {
-      const winner1 = wheel1.getWinningValue();
-      const winner2 = wheel2.getWinningValue();
+    // Action executed when spinner lands
+    function onWheelStopped() {
+      const winnerCode = wheel.getWinningValue();
 
-      const title1 = wheel1.getTitle();
-      const title2 = wheel2.getTitle();
+      // Find the corresponding card details
+      const activeCard = challengeCards.find(c => c.id === winnerCode);
+      if (!activeCard) return;
 
-      // Audio victory notification
       playLandChime();
-
-      // Fire festive canvas-based confetti
       triggerConfetti();
 
-      // Update banner results
-      const meta = document.getElementById('result-meta');
-      const text = document.getElementById('result-text');
+      // Instantly inject briefing variables
+      document.getElementById('brief-title').innerText = `${activeCard.id}: ${activeCard.platform}`;
+      document.getElementById('brief-platform').innerText = activeCard.platform;
+      document.getElementById('brief-target').innerText = activeCard.target;
+      document.getElementById('brief-scenario').innerText = activeCard.scenario;
+      document.getElementById('brief-deliverables').innerText = activeCard.deliverables;
+      document.getElementById('brief-time').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-      if (appTheme === 'bounty') {
-        meta.innerText = `🏴‍☠️ GRAND LINE WANTED SELECTION 🏴‍☠️`;
-        text.innerHTML = `
-          <span class="text-amber-400 font-extrabold uppercase bg-amber-950/60 px-3 py-1 rounded-xl border border-amber-500/40 pirate-font text-lg md:text-xl">${winner1}</span> 
-          <span class="text-stone-400 font-semibold text-xs py-1 px-2">HAS ASSIGNED</span> 
-          <span class="text-red-400 font-extrabold uppercase bg-red-950/60 px-3 py-1 rounded-xl border border-red-500/40 pirate-font text-lg md:text-xl">${winner2}</span>
-        `;
-      } else {
-        meta.innerText = `${title1} ✦ ${title2}`;
-        text.innerHTML = `
-          <span class="text-cyan-400 font-extrabold uppercase bg-cyan-950/40 px-3 py-1 rounded-xl border border-cyan-500/20">${winner1}</span> 
-          <span class="text-slate-500 font-semibold text-sm">combined with</span> 
-          <span class="text-purple-400 font-extrabold uppercase bg-purple-950/40 px-3 py-1 rounded-xl border border-purple-500/20">${winner2}</span>
-        `;
-      }
-
-      // Log results history
-      logToHistory(winner1, winner2);
+      // Build Considerations list
+      const considerationsUl = document.getElementById('brief-considerations');
+      considerationsUl.innerHTML = "";
+      activeCard.considerations.forEach(pt => {
+        const li = document.createElement('li');
+        li.innerText = pt;
+        considerationsUl.appendChild(li);
+      });
 
       // Re-enable interactive Shuffle
       const btn = document.getElementById('btn-shuffle');
@@ -941,58 +681,6 @@
       btn.classList.remove('opacity-75', 'cursor-not-allowed');
     }
 
-    // History Logger Utility
-    function logToHistory(val1, val2) {
-      const title1 = wheel1.getTitle();
-      const title2 = wheel2.getTitle();
-      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-      const record = { title1, val1, title2, val2, timestamp };
-      history.unshift(record);
-
-      const emptyMsg = document.getElementById('empty-history');
-      if (emptyMsg) emptyMsg.remove();
-
-      const container = document.getElementById('history-container');
-      const item = document.createElement('div');
-      
-      const recordClass = appTheme === 'bounty' 
-        ? "p-2.5 bg-stone-950/60 border border-amber-900/40 hover:border-amber-600/60 text-stone-200"
-        : "p-2.5 bg-slate-900/60 border border-slate-700/40 hover:border-slate-600/60 text-slate-200";
-
-      item.className = `${recordClass} rounded-xl text-xs space-y-1 hover:shadow-md transition-all`;
-      item.innerHTML = `
-        <div class="flex justify-between items-center text-[10px] text-stone-500">
-          <span class="font-bold uppercase tracking-wider">${title1} + ${title2}</span>
-          <span>${timestamp}</span>
-        </div>
-        <div class="flex flex-wrap gap-1 items-center">
-          <span class="text-amber-400 font-black">${val1}</span>
-          <span class="text-stone-400 text-[10px]">➜</span>
-          <span class="text-red-400 font-black">${val2}</span>
-        </div>
-      `;
-      container.insertBefore(item, container.firstChild);
-
-      // Truncate list at max 20 history instances
-      if (container.children.length > 20) {
-        container.removeChild(container.lastChild);
-      }
-    }
-
-    // History Log Purger
-    function clearHistory() {
-      const container = document.getElementById('history-container');
-      container.innerHTML = `
-        <div class="text-stone-500 text-center text-xs py-4 italic" id="empty-history">
-          No results logged yet.
-        </div>
-      `;
-      history.length = 0;
-    }
-
-
-    /* Canvas-based Custom Confetti Particle System */
     const confCanvas = document.getElementById('confetti-canvas');
     const confCtx = confCanvas.getContext('2d');
     let confettiParticles = [];
@@ -1006,12 +694,7 @@
 
     function triggerConfetti() {
       const count = 100;
-      
-      // Determine palettes based on themes
-      const bountyPalette = ['#fef08a', '#eab308', '#ca8a04', '#ca8a04', '#854d0e', '#fef08a']; // Gold hues (Beli Doubloons)
       const cosmicPalette = ['#22d3ee', '#38bdf8', '#818cf8', '#a78bfa', '#c084fc', '#f472b6', '#34d399'];
-
-      const activePalette = appTheme === 'bounty' ? bountyPalette : cosmicPalette;
 
       for (let i = 0; i < count; i++) {
         confettiParticles.push({
@@ -1019,13 +702,13 @@
           y: window.innerHeight * 0.4 + (Math.random() - 0.5) * 100,
           vx: (Math.random() - 0.5) * 15,
           vy: (Math.random() - 1.2) * 12,
-          color: activePalette[Math.floor(Math.random() * activePalette.length)],
+          color: cosmicPalette[Math.floor(Math.random() * cosmicPalette.length)],
           size: Math.random() * 8 + 6,
           rotation: Math.random() * Math.PI * 2,
           rotationSpeed: (Math.random() - 0.5) * 0.2,
           gravity: 0.35,
           opacity: 1,
-          type: appTheme === 'bounty' ? 'coin' : 'square' // dynamic particle styles
+          type: 'square'
         });
       }
     }
@@ -1043,36 +726,16 @@
         p.rotation += p.rotationSpeed;
         p.opacity -= 0.015;
 
-        // Render particles
         confCtx.save();
         confCtx.translate(p.x, p.y);
         confCtx.rotate(p.rotation);
         confCtx.globalAlpha = Math.max(0, p.opacity);
 
-        if (p.type === 'coin') {
-          // Draw simulated gold Beli pirate coins
-          confCtx.beginPath();
-          confCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
-          confCtx.fillStyle = p.color;
-          confCtx.fill();
-          confCtx.lineWidth = 1;
-          confCtx.strokeStyle = '#854d0e';
-          confCtx.stroke();
-
-          // Inner gold coin accent line
-          confCtx.beginPath();
-          confCtx.arc(0, 0, p.size / 3, 0, Math.PI * 2);
-          confCtx.strokeStyle = '#ca8a04';
-          confCtx.stroke();
-        } else {
-          // Draw standard cosmic geometric squares
-          confCtx.fillStyle = p.color;
-          confCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        }
+        confCtx.fillStyle = p.color;
+        confCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
 
         confCtx.restore();
 
-        // Expire or boundary cleanups
         if (p.opacity <= 0 || p.y > window.innerHeight) {
           confettiParticles.splice(i, 1);
         }
